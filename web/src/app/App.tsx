@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 
-const API_BASE = 'http://localhost:8000'
+const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:8000'
 
 function dataUrlToBlob(dataUrl: string): Blob {
   const [header, base64] = dataUrl.split(',')

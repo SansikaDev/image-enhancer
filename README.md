@@ -70,6 +70,20 @@ Development tips
 
 CI
 - A GitHub Actions workflow (.github/workflows/ci.yml) builds the frontend and verifies the backend health endpoint.
+- A Vercel deploy workflow (.github/workflows/vercel.yml) deploys the web app to Vercel on push to main (requires secrets).
+
+Deploy to Vercel (frontend)
+1) Create a new Vercel project pointing to this repo, set the project root to web/.
+2) In Vercel Project Settings → Environment Variables, set:
+   - VITE_API_BASE = https://your-backend.example.com (public URL of your FastAPI backend)
+3) In GitHub repo settings → Secrets and variables → Actions, add:
+   - VERCEL_TOKEN (Personal Access Token from Vercel)
+   - Optionally configure Vercel Project linking via the dashboard; the GitHub Action uses vercel --cwd web.
+4) Push to main (or use the Actions tab → Deploy to Vercel (web)).
+
+Notes
+- The API base URL is configurable via VITE_API_BASE at build/runtime. For local dev it defaults to http://localhost:8000.
+- If you want to deploy the backend on a managed host (e.g., Railway/Render/Fly), I can add infra files and workflows.
 
 License
 - MIT (update if needed)

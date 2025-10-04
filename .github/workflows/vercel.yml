@@ -1,0 +1,35 @@
+name: Deploy to Vercel (web)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Build web (for cache + validation)
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to Vercel (Production)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          # Note: This assumes you have set the project root to `web/` in Vercel,
+          # or that you deploy with --cwd web below.
+          vercel --cwd web --prod --yes --token "$VERCEL_TOKEN"
